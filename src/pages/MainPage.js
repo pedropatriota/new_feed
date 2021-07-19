@@ -16,8 +16,7 @@ function MainPage() {
 
   return (
    <Template>
-     {/* <PostsList/> */}
-     hello world
+     <PostsList/>     
    </Template>
   )
 }
