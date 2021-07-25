@@ -4,8 +4,9 @@ import{ add, postComments} from '../../redux/slices/commentsSlice'
 import * as S from './styles';
 
 function Comments({postId, commentsByPostId, addNewComment, newComments}) {
-  const dispatch = useDispatch()
-  const newComment= useSelector(state=> state.comments.newComment)   
+  const dispatch = useDispatch()  
+  const {comments}= useSelector(state=> state.comments)   
+
 
   const [ state, setState]= useState({
     name: '',
@@ -20,37 +21,34 @@ function Comments({postId, commentsByPostId, addNewComment, newComments}) {
     else setDisabled(true)
   },[state])
 
-  useEffect(()=>{   
-    dispatch(add())     
-  }, [newComment])
-  
+    
   const handleChange= (event)=>{
     setState({
       ...state, 
       [event.target.id]:event.target.value
     })
   }  
-
+  
   const submitComment = (event)=>{  
     event.preventDefault()    
-    const obj = {   
+    const obj = {         
       name: state.name,
       body: state.body,
       email: 'user@gmail.com',
       postId: postId
-    }
+    }   
     // resource will not be really updated on the server but it will be faked as if.   
-    dispatch(postComments(obj))   
-
+    dispatch(postComments(obj)).then(()=> dispatch(add()) )
+    
     setState({name:'', body:''})
     addNewComment()
   }
 
-
+  console.log(comments)
   return (
    <S.Container>     
-        {commentsByPostId?.map(comment=>(
-          <S.List key={comment.id}>
+        {commentsByPostId?.map((comment, index)=>(
+          <S.List key={index}>
             <S.Name>{comment.name}</S.Name>
             <S.Body>{comment.body}</S.Body>
           </S.List>
