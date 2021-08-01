@@ -24,7 +24,7 @@ export const fetchComments = createAsyncThunk(
 export const postComments = createAsyncThunk(
   'comments/post',
   async (newComment) => {    
-    const {data} = await api.post('comments', newComment);     
+    const {data} = await api.put('comments', newComment);     
     return data    
   }
 );
